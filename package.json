@@ -1,0 +1,19 @@
+{
+  "name": "play-with-intel-edison",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yuwzho/play-with-intel-edison.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/yuwzho/play-with-intel-edison/issues"
+  },
+  "homepage": "https://github.com/yuwzho/play-with-intel-edison#readme"
+}
