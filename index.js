@@ -46,12 +46,13 @@ board.on("ready", function () {
     });
 
     var readingLight = true;
-    light.scale(0, 255).on("change", function() {
+    light.on("change", function() {
         if(!readingLight) { return; }
         readingLight = false;
-        g = linear(0x00, 0xFF, this.value, 0, 100);
+        var light = this.value;
+        g = linear(0x00, 0xFF, light, 0, 100);
         setTimeout(function () {
-            lcd.bgColor(r, g, b).cursor(0, 0).print('Light Level:' + this.value);
+            lcd.bgColor(r, g, b).cursor(0, 0).print('Light Level:' + light);
             readingLight = true;
         }, interval);
     });
