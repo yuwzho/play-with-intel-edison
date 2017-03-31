@@ -34,7 +34,7 @@ board.on("ready", function () {
         }
         readingTemperature = false;
         f = Math.round(this.fahrenheit);
-        r = linear(0x00, 0xFF, f, 70, 90);
+        r = linear(0x00, 0xFF, f, 85, 95);
         setTimeout(function () {
             lcd.bgColor(r, g, b).cursor(0, 0).print('temperature:' + f + 'F');
             readingTemperature = true;
@@ -46,7 +46,7 @@ board.on("ready", function () {
         if (!readingLight) { return; }
         readingLight = false;
         var light = this.value;
-        g = linear(0x00, 0xFF, light, 0, 300);
+        g = linear(0x00, 0xFF, light, 540, 560);
         setTimeout(function () {
             lcd.bgColor(r, g, b).cursor(1, 0).print('Light Level:' + light);
             readingLight = true;
@@ -58,7 +58,7 @@ board.on("ready", function () {
         if (!readingSound) { return; }
         readingSound = false;
         var sound = this.value;
-        b = linear(0x0, 0xFF, sound, 100, 1000);
+        b = linear(0x0, 0xFF, sound, 110, 140);
         setTimeout(function () {
             lcd.bgColor(r, g, b).cursor(2, 0).print('Sound Level:' + sound);
             readingSound = true;
@@ -79,5 +79,8 @@ board.on("ready", function () {
 
 // [Linear Interpolation](https://en.wikipedia.org/wiki/Linear_interpolation)
 function linear(start, end, feed, step, steps) {
-    return (end - start) * (feed - step) / (steps - step) + start;
+    var value = (end - start) * (feed - step) / (steps - step) + start;
+    if (value > end) { return end; }
+    if (value < start) { return start; }
+    return value;
 }
