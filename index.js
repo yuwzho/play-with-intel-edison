@@ -11,6 +11,7 @@ board.on("ready", function () {
     // Plug the Rotary Angle sensor module
     // into the Grove Shield's A0 jack
     var rotary = new five.Sensor("A3");
+    var light = new five.Sensor("A1");
     var thermometer = new five.Thermometer({
         controller: "GROVE",
         pin: "A0"
@@ -24,6 +25,8 @@ board.on("ready", function () {
     var lcd = new five.LCD({
         controller: "JHD1313M1"
     });
+    
+    var interval = 2000;
 
     var f = 0;
     var readingTemperature = true;
@@ -39,7 +42,18 @@ board.on("ready", function () {
         setTimeout(function () {
             lcd.bgColor(r, g, b).cursor(0, 0).print('temperature:' + f + 'F');
             readingTemperature = true;
-        }, 2000);
+        }, interval);
+    });
+
+    var readingLight = true;
+    light.on("change", function() {
+        if(!readingLight) { return; }
+        readingLight = false;
+        g = linear(0x00, 0xFF, this.value, 0, 100);
+        setTimeout(function () {
+            lcd.bgColor(r, g, b).cursor(0, 0).print('Light Level:' + this.value);
+            readingLight = true;
+        }, interval);
     });
 
     // light.on("change", function () {
