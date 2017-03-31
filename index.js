@@ -16,16 +16,14 @@ board.on("ready", function () {
         controller: "GROVE",
         pin: "A0"
     });
-    // var light = new five.Light({
-    //     controller: "TSL2561"
-    // });
+    var sound = new five.Sensor("A2");
 
     // Plug the LCD module into any of the
     // Grove Shield's I2C jacks.
     var lcd = new five.LCD({
         controller: "JHD1313M1"
     });
-    
+
     var interval = 2000;
 
     var f = 0;
@@ -46,15 +44,35 @@ board.on("ready", function () {
     });
 
     var readingLight = true;
-    light.on("change", function() {
-        if(!readingLight) { return; }
+    light.on("change", function () {
+        if (!readingLight) { return; }
         readingLight = false;
         var light = this.value;
-        g = linear(0x00, 0xFF, light, 0, 100);
+        g = linear(0x00, 0xFF, light, 0, 300);
         setTimeout(function () {
             lcd.bgColor(r, g, b).cursor(1, 0).print('Light Level:' + light);
             readingLight = true;
         }, interval);
+    });
+
+    var readingSound = true;
+    var count = 0;
+    var sum = 0;
+    sound.on("data", function () {
+        if (!readingSound) { return; }
+        sum += this.value;
+        count++;
+        if (count === 5) {
+            readingSound = false;
+            count = 0;
+            var sound = sum >> 5;
+            sum = 0;
+            b = linear(0x0, 0xFF, sound, 0, 100);
+            setTimeout(function () {
+                lcd.bgColor(r, g, b).cursor(2, 0).print('Sound Level:' + sound);
+                readingSound = true;
+            }, interval);
+        }
     });
 
     // light.on("change", function () {
