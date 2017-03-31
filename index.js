@@ -33,9 +33,7 @@ board.on("ready", function () {
             return;
         }
         readingTemperature = false;
-
         f = Math.round(this.fahrenheit);
-
         r = linear(0x00, 0xFF, f, 70, 90);
         setTimeout(function () {
             lcd.bgColor(r, g, b).cursor(0, 0).print('temperature:' + f + 'F');
@@ -56,23 +54,15 @@ board.on("ready", function () {
     });
 
     var readingSound = true;
-    var count = 0;
-    var sum = 0;
     sound.on("data", function () {
         if (!readingSound) { return; }
-        sum += this.value;
-        count++;
-        if (count === 5) {
-            readingSound = false;
-            count = 0;
-            var sound = sum >> 5;
-            sum = 0;
-            b = linear(0x0, 0xFF, sound, 100, 1000);
-            setTimeout(function () {
-                lcd.bgColor(r, g, b).cursor(2, 0).print('Sound Level:' + sound);
-                readingSound = true;
-            }, interval);
-        }
+        readingSound = false;
+        var sound = this.value;
+        b = linear(0x0, 0xFF, sound, 100, 1000);
+        setTimeout(function () {
+            lcd.bgColor(r, g, b).cursor(2, 0).print('Sound Level:' + sound);
+            readingSound = true;
+        }, interval);
     });
 
     // Set scaling of the Rotary angle
@@ -81,7 +71,7 @@ board.on("ready", function () {
     // color to a RGB value between
     // Red and Violet based on the
     // value of the rotary sensor.
-    rotary.scale(1000, 10000).on("change", function() {
+    rotary.scale(1000, 10000).on("change", function () {
         interval = this.value;
     });
 
