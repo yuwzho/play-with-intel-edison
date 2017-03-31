@@ -35,7 +35,7 @@ board.on("ready", function () {
 
         f = Math.round(this.fahrenheit);
 
-        r = linear(0x00, 0xFF, f, 100);
+        r = linear(0x00, 0xFF, f, 5);
         setTimeout(function () {
             lcd.bgColor(r, g, b).cursor(0, 0).print('temperature:' + f + 'F');
             readingTemperature = true;
