@@ -52,7 +52,7 @@ board.on("ready", function () {
         var light = this.value;
         g = linear(0x00, 0xFF, light, 0, 100);
         setTimeout(function () {
-            lcd.bgColor(r, g, b).cursor(0, 0).print('Light Level:' + light);
+            lcd.bgColor(r, g, b).cursor(1, 0).print('Light Level:' + light);
             readingLight = true;
         }, interval);
     });
