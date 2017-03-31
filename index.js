@@ -46,7 +46,7 @@ board.on("ready", function () {
     });
 
     var readingLight = true;
-    light.on("change", function() {
+    light.scale(0, 255).on("change", function() {
         if(!readingLight) { return; }
         readingLight = false;
         g = linear(0x00, 0xFF, this.value, 0, 100);
