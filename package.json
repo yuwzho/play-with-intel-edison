@@ -15,5 +15,9 @@
   "bugs": {
     "url": "https://github.com/yuwzho/play-with-intel-edison/issues"
   },
-  "homepage": "https://github.com/yuwzho/play-with-intel-edison#readme"
+  "homepage": "https://github.com/yuwzho/play-with-intel-edison#readme",
+  "dependencies": {
+    "edison-io": "^0.9.4",
+    "johnny-five": "^0.9.33"
+  }
 }
