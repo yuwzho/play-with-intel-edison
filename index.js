@@ -25,6 +25,7 @@ board.on("ready", function() {
     controller: "JHD1313M1"
   });
 
+  var f = 0;
   thermometer.on("data", function() {
     if (f === Math.round(this.fahrenheit)) {
       return;
