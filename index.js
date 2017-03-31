@@ -16,16 +16,14 @@ board.on("ready", function () {
         controller: "GROVE",
         pin: "A0"
     });
-    // var light = new five.Light({
-    //     controller: "TSL2561"
-    // });
+    var sound = new five.Sensor("A2");
 
     // Plug the LCD module into any of the
     // Grove Shield's I2C jacks.
     var lcd = new five.LCD({
         controller: "JHD1313M1"
     });
-    
+
     var interval = 2000;
 
     var f = 0;
@@ -35,10 +33,8 @@ board.on("ready", function () {
             return;
         }
         readingTemperature = false;
-
         f = Math.round(this.fahrenheit);
-
-        r = linear(0x00, 0xFF, f, 70, 90);
+        r = linear(0x00, 0xFF, f, 85, 95);
         setTimeout(function () {
             lcd.bgColor(r, g, b).cursor(0, 0).print('temperature:' + f + 'F');
             readingTemperature = true;
@@ -46,21 +42,28 @@ board.on("ready", function () {
     });
 
     var readingLight = true;
-    light.on("change", function() {
-        if(!readingLight) { return; }
+    light.on("change", function () {
+        if (!readingLight) { return; }
         readingLight = false;
         var light = this.value;
-        g = linear(0x00, 0xFF, light, 0, 100);
+        g = linear(0x00, 0xFF, light, 540, 560);
         setTimeout(function () {
             lcd.bgColor(r, g, b).cursor(1, 0).print('Light Level:' + light);
             readingLight = true;
         }, interval);
     });
 
-    // light.on("change", function () {
-    //     g = linear(0x00, 0xFF, this.level, 100);
-    //     lcd.bgColor(r, g, b).cursor(1, 0).print("Ambient Light Level: ", this.level);
-    // });
+    var readingSound = true;
+    sound.on("data", function () {
+        if (!readingSound) { return; }
+        readingSound = false;
+        var sound = this.value;
+        b = linear(0x0, 0xFF, sound, 110, 140);
+        setTimeout(function () {
+            lcd.bgColor(r, g, b).cursor(2, 0).print('Sound Level:' + sound);
+            readingSound = true;
+        }, interval);
+    });
 
     // Set scaling of the Rotary angle
     // sensor's output to 0-255 (8-bit)
@@ -68,17 +71,16 @@ board.on("ready", function () {
     // color to a RGB value between
     // Red and Violet based on the
     // value of the rotary sensor.
-    //   rotary.scale(0, 255).on("change", function() {
-    //     var r = linear(0xFF, 0x4B, this.value, 0xFF);
-    //     var g = linear(0x00, 0x00, this.value, 0xFF);
-    //     var b = linear(0x00, 0x82, this.value, 0xFF);
-
-    //     lcd.bgColor(r, g, b);
-    //   });
+    rotary.scale(1000, 10000).on("change", function () {
+        interval = this.value;
+    });
 
 });
 
 // [Linear Interpolation](https://en.wikipedia.org/wiki/Linear_interpolation)
 function linear(start, end, feed, step, steps) {
-    return (end - start) * (feed - step) / (steps - step) + start;
+    var value = (end - start) * (feed - step) / (steps - step) + start;
+    if (value > end) { return end; }
+    if (value < start) { return start; }
+    return value;
 }
