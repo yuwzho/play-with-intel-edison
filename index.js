@@ -67,7 +67,7 @@ board.on("ready", function () {
             count = 0;
             var sound = sum >> 5;
             sum = 0;
-            b = linear(0x0, 0xFF, sound, 0, 100);
+            b = linear(0x0, 0xFF, sound, 100, 1000);
             setTimeout(function () {
                 lcd.bgColor(r, g, b).cursor(2, 0).print('Sound Level:' + sound);
                 readingSound = true;
@@ -75,24 +75,15 @@ board.on("ready", function () {
         }
     });
 
-    // light.on("change", function () {
-    //     g = linear(0x00, 0xFF, this.level, 100);
-    //     lcd.bgColor(r, g, b).cursor(1, 0).print("Ambient Light Level: ", this.level);
-    // });
-
     // Set scaling of the Rotary angle
     // sensor's output to 0-255 (8-bit)
     // range. Set the LCD's background
     // color to a RGB value between
     // Red and Violet based on the
     // value of the rotary sensor.
-    //   rotary.scale(0, 255).on("change", function() {
-    //     var r = linear(0xFF, 0x4B, this.value, 0xFF);
-    //     var g = linear(0x00, 0x00, this.value, 0xFF);
-    //     var b = linear(0x00, 0x82, this.value, 0xFF);
-
-    //     lcd.bgColor(r, g, b);
-    //   });
+    rotary.scale(1000, 10000).on("change", function() {
+        interval = this.value;
+    });
 
 });
 
