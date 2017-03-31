@@ -35,7 +35,7 @@ board.on("ready", function () {
 
         f = Math.round(this.fahrenheit);
 
-        r = linear(0x00, 0xFF, f, 5);
+        r = linear(0x00, 0xFF, f, 70, 90);
         setTimeout(function () {
             lcd.bgColor(r, g, b).cursor(0, 0).print('temperature:' + f + 'F');
             readingTemperature = true;
@@ -64,6 +64,6 @@ board.on("ready", function () {
 });
 
 // [Linear Interpolation](https://en.wikipedia.org/wiki/Linear_interpolation)
-function linear(start, end, step, steps) {
-    return (end - start) * step / steps + start;
+function linear(start, end, feed, step, steps) {
+    return (end - start) * (feed - step) / (steps - step) + start;
 }
